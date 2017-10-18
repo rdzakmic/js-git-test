@@ -1,0 +1,45 @@
+class: Workflow
+cwlVersion: v1.0
+inputs:
+  - id: transcripts
+    type: 'File[]'
+    'sbg:x': 0
+    'sbg:y': 53.5
+  - id: reads
+    type: 'File[]'
+    'sbg:x': 138.109375
+    'sbg:y': 0
+outputs:
+  - id: quants
+    outputSource:
+      - quantifying/quantification
+    type: File
+    'sbg:x': 518.3233642578125
+    'sbg:y': 53.5
+steps:
+  - id: indexing
+    in:
+      - id: fasta-files
+        source:
+          - transcripts
+    out:
+      - id: index
+    run: ../tools/kallisto-index.cwl
+    'sbg:x': 138.109375
+    'sbg:y': 107
+  - id: quantifying
+    in:
+      - id: index
+        source:
+          - indexing/index
+      - id: fastqs
+        source:
+          - reads
+    out:
+      - id: quantification
+    run: ../tools/kallisto-quant.cwl
+    'sbg:x': 312.28125
+    'sbg:y': 46.5
+hints:
+  - dockerPull: insilicodb/kallisto
+    undefined: DockerRequirement
